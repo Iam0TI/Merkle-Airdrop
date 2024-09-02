@@ -11,7 +11,7 @@ import {AirdropError} from "./Error.sol";
 contract MerkleDrop  is AirdropError {
 
     
-    address immutable owner;
+    address public immutable owner;
     IERC20 public immutable tokenAddress;
 
     // the merkle tree root 
@@ -32,6 +32,8 @@ contract MerkleDrop  is AirdropError {
         _onlyOwner();
         isActive = !isActive;
     }
+
+    // function to claimed airdrop we don't consider  the amount decimal here we are assuming it been handle 
    function claimAirDrop(bytes32[] calldata proof, uint256 index, uint256 amount) external {
         //checks if claiming is active 
         if (!isActive){
@@ -58,6 +60,7 @@ contract MerkleDrop  is AirdropError {
         // the whole reason for double hashing to prevent something called preimage attack read more  here (https:/medium.com/rareskills/the-second-preimage-attack-for-merkle-trees-in-solidity-e9d74fe7fdcd)
         bytes32 leaf = keccak256(bytes.concat(keccak256(abi.encode(addr, index, amount))));
 
+        // checks if the proof is valid 
         if (!MerkleProof.verify(proof, merkleRoot, leaf)){
             revert InvalidProof();
         }
