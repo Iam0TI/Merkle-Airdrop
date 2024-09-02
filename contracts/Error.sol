@@ -6,4 +6,5 @@ contract AirdropError {
     error AlreadyClaimed();
     error ClaimingEnded();
     error InvalidProof();
+    error AirdropIsActive();
 }
