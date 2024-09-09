@@ -7,14 +7,13 @@ function generateProof(address) {
     JSON.parse(fs.readFileSync("tree.json", "utf8"))
   );
 
-  // Loop through the tree to find the entry for the provided address
   for (const [i, v] of tree.entries()) {
     if (v[0].toLowerCase() === address.toLowerCase()) {
       // Generate the proof for the given index
       const proof = tree.getProof(i);
       return {
         value: v,
-        proof: proof
+        proof: proof,
       };
     }
   }
