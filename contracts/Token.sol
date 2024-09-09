@@ -7,8 +7,7 @@ contract Web3CXI is ERC20("Airdrop Token", "ADT") {
 
     constructor() {
         // owner = msg.sender;
-        // minting a total supply of one million token 
+        // minting a total supply of one million token
         _mint(msg.sender, 1000000e18);
     }
-
 }
