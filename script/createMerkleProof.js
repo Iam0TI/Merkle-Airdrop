@@ -1,17 +1,26 @@
 const { StandardMerkleTree } = require("@openzeppelin/merkle-tree");
 const fs = require("fs");
-// (1)
-const tree = StandardMerkleTree.load(
-  JSON.parse(fs.readFileSync("tree.json", "utf8"))
-);
 
-// (2)
-for (const [i, v] of tree.entries()) {
-  // generating the proof for address "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC" so you can change it
-  if (v[0] === "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC") {
-    // (3)
-    const proof = tree.getProof(i);
-    console.log("Value:", v);
-    console.log("Proof:", proof);
+function generateProof(address) {
+  // Load the Merkle tree from a JSON file
+  const tree = StandardMerkleTree.load(
+    JSON.parse(fs.readFileSync("tree.json", "utf8"))
+  );
+
+  // Loop through the tree to find the entry for the provided address
+  for (const [i, v] of tree.entries()) {
+    if (v[0].toLowerCase() === address.toLowerCase()) {
+      // Generate the proof for the given index
+      const proof = tree.getProof(i);
+      return {
+        value: v,
+        proof: proof
+      };
+    }
   }
+
+  // If the address is not found, throw an error
+  throw new Error(`Address ${address} not found in Merkle tree`);
 }
+
+module.exports = { generateProof };
